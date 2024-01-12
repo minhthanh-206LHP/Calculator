@@ -1,8 +1,10 @@
 let runningTotal = 0;
 let buffer = "0";
-let privOperator ;
+let exp = "";
+let prevOperator ;
 
 const screen = document.querySelector('.screen');
+const exp_screen = document.querySelector('.screen-smol')
 function buttonClick (value) {
     if (isNaN(value)) {
         handleSymbol(value);
@@ -11,21 +13,27 @@ function buttonClick (value) {
         handleNumber(value);
     }
     screen.innerText = buffer;
+    exp_screen.innerText = exp;
+    console.log(buffer);
+    console.log(exp);
 }
 
 function handleSymbol(symbol) {
     switch (symbol) {
         case 'C':
             buffer = '0';
+            exp = "";
             runningTotal = 0;
             break;
         case '=':
-            if (privOperator === null) {
+            if (prevOperator === null) {
                 return
             }
+            exp += buffer;
             flushOperation(parseInt(buffer));
-            privOperator = null;
-            buffer = runningTotal;
+            prevOperator = null;
+            buffer = runningTotal.toString();
+
             runningTotal = 0;
             break;
         case '←':
@@ -48,31 +56,40 @@ function handleMath (symbol) {
     if (buffer === '0') {
         return
     }
-
     const intBuffer = parseInt(buffer);
-
     if (runningTotal === 0) {
         runningTotal = intBuffer;
     }else {
         flushOperation(intBuffer);
     }
-    privOperator = symbol;
+    if (prevOperator === null) {
+        exp = runningTotal.toString() + " " + symbol + " ";
+    }else {
+        exp += buffer + " " + symbol + " ";
+    }
+    prevOperator = symbol;
+    
     buffer = '0';
 }
 
 function flushOperation (intBuffer) {
-    if (privOperator === '+') {
+    if (prevOperator === '+') {
         runningTotal += intBuffer;
-    }else if (privOperator === '−') {
+    }else if (prevOperator === '−') {
         runningTotal -= intBuffer;
-    }else if (privOperator === '×') {
+    }else if (prevOperator === '×') {
         runningTotal *= intBuffer;
-    }else if (privOperator === '÷') {
+    }else if (prevOperator === '÷') {
         runningTotal /= intBuffer;
     }
+    prevOperator = null;
 }
 
 function handleNumber (numberString) {
+    if (prevOperator === null) {
+        buffer = "0";
+        exp = "";
+    }
     if (buffer === "0") {
         buffer = numberString;
     }else {
