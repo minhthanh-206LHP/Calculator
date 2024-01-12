@@ -15,7 +15,7 @@ function buttonClick (value) {
     screen.innerText = buffer;
     exp_screen.innerText = exp;
     console.log(buffer);
-    console.log(exp);
+    console.log(runningTotal);
 }
 
 function handleSymbol(symbol) {
@@ -42,6 +42,11 @@ function handleSymbol(symbol) {
             }else {
                 buffer = buffer.substring(0,buffer.length-1);
             }
+            break;
+        case '√':
+            runningTotal = Math.sqrt(parseInt(buffer));
+            buffer = runningTotal.toString();
+            console.log('Its here xD');
             break;
         case '+':
         case '−':
