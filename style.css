@@ -51,6 +51,10 @@ body {
     width: 326px;
 }
 
+.smol {
+    font-size: 20px;
+}
+
 .cal-button-row{
     display: flex;
     justify-content: space-between;
